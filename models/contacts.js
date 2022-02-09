@@ -4,14 +4,24 @@ const contactsPath = path.resolve("./models/contacts.json");
 
 const listContacts = async () => {
   try {
-    const response = await fs.readFile(contactsPath);
-    return response;
+    return await fs.readFile(contactsPath);
   } catch (error) {
     return console.log(error.message);
   }
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  try {
+    const contactsData = await fs.readFile(contactsPath);
+    const currentContact = JSON.parse(contactsData);
+    const newFilerContact = currentContact.filter(
+      (contact) => contact.id === contactId
+    );
+    return newFilerContact;
+  } catch (error) {
+    return console.log(error.message);
+  }
+};
 
 const removeContact = async (contactId) => {};
 
