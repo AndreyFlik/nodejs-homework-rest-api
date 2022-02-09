@@ -23,7 +23,14 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const contactsData = await fs.readFile(contactsPath);
+  const currentContact = JSON.parse(contactsData);
+  const newFilerContact = currentContact.filter(
+    (contact) => contact.id === contactId
+  );
+  return newFilerContact;
+};
 
 const addContact = async (body) => {};
 
