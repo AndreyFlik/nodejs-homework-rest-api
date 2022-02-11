@@ -52,25 +52,35 @@ const updateContact = async (contactId, body) => {
   try {
     const contactsData = await fs.readFile(contactsPath);
     const currentContact = JSON.parse(contactsData);
-    const getContactById = currentContact.find(
+    const updateContactList = currentContact.map((contact) => {
+      if (contact.id === contactId) {
+        return {
+          ...contact,
+          name: body.name,
+          email: body.email,
+          phone: body.phone,
+        };
+      }
+      return contact;
+    });
+
+    const getContactById = updateContactList.find(
       (contact) => contact.id === contactId
     );
-
-    currentContact.forEach((contact) => {
-      if (contact.id === contactId) {
-        contact.name = body.name;
-        contact.email = body.email;
-        contact.phone = body.phone;
-      }
-    });
-    await fs.writeFile(contactsPath, JSON.stringify(currentContact));
+    await fs.writeFile(contactsPath, JSON.stringify(updateContactList));
 
     return getContactById;
   } catch (error) {
     console.log(error.message);
   }
 };
-
+// currentContact.forEach((contact) => {
+//   if (contact.id === contactId) {
+//     contact.name = body.name;
+//     contact.email = body.email;
+//     contact.phone = body.phone;
+//   }
+// });
 module.exports = {
   listContacts,
   getContactById,
