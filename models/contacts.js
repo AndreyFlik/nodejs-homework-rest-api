@@ -53,17 +53,28 @@ const updateContact = async (contactId, body) => {
     const contactsData = await fs.readFile(contactsPath);
     const currentContact = JSON.parse(contactsData);
     const updateContactList = currentContact.map((contact) => {
+      const {
+        name = contact.name,
+        email = contact.email,
+        phone = contact.phone,
+      } = body;
       if (contact.id === contactId) {
         return {
           ...contact,
-          name: body.name,
-          email: body.email,
-          phone: body.phone,
+          name,
+          email,
+          phone,
         };
       }
       return contact;
     });
-
+    // currentContact.forEach((contact) => {
+    //   if (contact.id === contactId) {
+    //     contact.name = body.name;
+    //     contact.email = body.email;
+    //     contact.phone = body.phone;
+    //   }
+    // });
     const getContactById = updateContactList.find(
       (contact) => contact.id === contactId
     );
@@ -74,13 +85,7 @@ const updateContact = async (contactId, body) => {
     console.log(error.message);
   }
 };
-// currentContact.forEach((contact) => {
-//   if (contact.id === contactId) {
-//     contact.name = body.name;
-//     contact.email = body.email;
-//     contact.phone = body.phone;
-//   }
-// });
+
 module.exports = {
   listContacts,
   getContactById,
