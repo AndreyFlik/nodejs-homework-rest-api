@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { customAlphabet } = require("nanoid");
 const Joi = require("joi");
 const {
@@ -15,7 +16,7 @@ const nanoid = customAlphabet("1234567890", 2);
 
 router.get("/", async (req, res, next) => {
   const getContact = await listContacts();
-  res.status(200).json(JSON.parse(getContact));
+  res.status(200).json(getContact);
 });
 
 router.get("/:contactId", async (req, res, next) => {
