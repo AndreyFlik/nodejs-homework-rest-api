@@ -7,6 +7,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts.js");
 
 const router = express.Router();
@@ -106,6 +107,25 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-// router.put("/:contactId/favorite", async (req, res, next) => { }
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    console.log(validationResult.error);
+    return res.status(400).json({ message: "Not found" });
+  }
+
+  try {
+    const updatedStatusContact = await updateStatusContact(
+      req.params.contactId,
+      req.body
+    );
+    res.status(200).json({ ...updatedStatusContact._doc, ...req.body });
+  } catch (error) {
+    next(error.message);
+  }
+});
 
 module.exports = router;
